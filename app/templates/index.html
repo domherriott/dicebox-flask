@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dicebox Games</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+  <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+</head>
+<body>
+  <section class="section">
+    <div class="column is-one-third is-offset-one-third">
+      <img src="{{ url_for('static',filename='images/dicebox.png') }}" alt="Dicebox Logo">
+      <h1 class="h1">Games list</h1>
+    </div>
+
+  </section>
+  
+  <section class="section" style="min-height:100vh">
+    <div class="columns">
+      <div class="column is-one-third is-offset-one-third">
+        <form hx-boost="true" hx-get="/search" hx-trigger="change delay:250ms" hx-target="#results"/>
+        <input type="text" class="input" placeholder="Search" name="q">
+        Number of players <input type="number" class="input" min=1 max=10 name="players" placeholder="1"/>  
+      </form>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column is-one-third is-offset-one-third">
+      </form>
+        
+      </div>
+    </div>
+
+    <table class="table is-fullwidth">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Title</th>
+          <th>Players</th>
+        </tr>
+      </thead>
+      <tbody id="results">
+
+      </tbody>
+    </table>
+  </section>
+</body>
+
+</html>
