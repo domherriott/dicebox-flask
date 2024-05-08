@@ -50,15 +50,15 @@ def load_data():
     db.drop_all()
     db.create_all()
     # print(db.tables)
-    df = pd.read_csv("./data/data.csv")
+    df = pd.read_csv("./bgg_export.csv")
 
     
     for index, row in df.iterrows():
         game = Game(
-            id=row["gameId"],
+            id=row["objectid"],
             title=row["name"],
-            minPlayers=row["minPlayers"],
-            maxPlayers=row["maxPlayers"]
+            minPlayers=row["min_players"],
+            maxPlayers=row["max_players"]
         )
         db.session.add(game)
     
