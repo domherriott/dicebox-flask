@@ -23,6 +23,19 @@ def get_attribute_value(item, attribute):
         return item.find(attribute).attrib["value"]
     except:
         return None
+    
+def get_link_info(item, link_type):
+    info = []
+    try:
+        links = item.findall('.//link')
+        for link in links:
+            if link.attrib["type"] == link_type:
+                info.append(link.attrib["value"])
+        
+        return info
+    except:
+        return None
+
 
 s = requests.Session()
 
@@ -54,14 +67,16 @@ def get_things(ids: list) -> pd.DataFrame:
     }
     r = s.get(urls["thing"], params=payload)
     xml = r.text
-
+    print(xml)
     data = []
     root = ET.fromstring(xml)
 
-    print(xml)
+
+
 
     for item in root.findall('.//item'):   
-        print(item.items())
+    
+        print(item)
         data.append({
             "id" : int(item.attrib['id']),
             "type" : item.attrib["type"],
@@ -72,9 +87,11 @@ def get_things(ids: list) -> pd.DataFrame:
             "min_players" : get_attribute_value(item, "minplayers"),
             "max_players" : get_attribute_value(item, "maxplayers"),
             "playing_time" : get_attribute_value(item, "playingtime"),
-            "min_playtime" : get_attribute_value(item, "minplaytime")
+            "min_playtime" : get_attribute_value(item, "minplaytime"),
+            "category" : get_link_info(item, link_type="boardgamecategory"),
+            "mechanic" : get_link_info(item, link_type="boardgamemechanic")
         })
-        exit()
+ 
 
     df = pd.DataFrame(data)
     return df
@@ -84,4 +101,7 @@ df_things = get_things(thing_ids)
 
     
 df = pd.merge(left=df_collection, right=df_things, left_on="objectid", right_on="id", validate="m:1")
+
+
+print(df)
 df.to_csv('bgg_export.csv')
