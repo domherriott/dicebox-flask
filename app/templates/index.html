@@ -16,26 +16,32 @@
     <div class="column is-one-third is-offset-one-third">
       <img src="{{ url_for('static',filename='images/dicebox.png') }}" alt="Dicebox Logo">
     </div>
-  </section>
 
-  <section class="section">
-    <form hx-boost="true" hx-get="/search" hx-trigger="change delay:250ms" hx-target="#results"/>
+    <form hx-boost="true" hx-get="/search" hx-trigger="change delay:250ms" hx-target="#results">
     
-    <section class="section">
-      <input type="text" class="input" placeholder="Search" name="q">
-    </section>
-    
-    <section class="section">
-
-      <div class="columns">
-
-        <div class="column is-one-third">
-          Number of players <input type="number" class="input" min=1 max=10 name="players" placeholder="1"/>  
+    <div class="columns">
+      <div class="column is-one-quarter">
+          Search
+          <input type="text" class="input" placeholder="Search" name="q">
         </div>
 
-        <div class="column is-one-third">
+        <div class="column is-one-quarter">
+          Number of players
+          <select name="players" id="players" class="input">
+            <option></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6+">6+</option>
+          </select>
+        </div>
+
+        <div class="column is-one-quarter">
           Category 
-          <select name="category" id="category">
+          <select name="category" id="category" class="input">
+            <option></option>
             <option value="Action">Action</option> 
             <option value="Card">Card</option>
             <option value="Dice">Dice</option>
@@ -55,9 +61,11 @@
           </select>
         </div>
 
-        <div class="column is-one-third">
+
+        <div class="column is-one-quarter">
           Mechanic
-          <select name="mechanic" id="mechanic">
+          <select name="mechanic" id="mechanic" class="input">
+            <option></option>
             <option value="Asymmetric">Asymmetric</option>
             <option value="Betting">Betting</option>
             <option value="Chance">Chance</option>
@@ -76,12 +84,14 @@
           </select>
         </div>
 
+      </div>
+    </form>
+
 
     </section>
-    </form>
   </section>
 
-  
+ 
   <section class="section" style="min-height:100vh">
   
     <table class="table is-fullwidth">
@@ -97,6 +107,8 @@
       </tbody>
     </table>
   </section>
+
+  <div hx-boost="true" hx-get="/load" hx-trigger="load" hx-target="#results">
 
 </body>
 

@@ -8,6 +8,7 @@ db = SQLAlchemy()
 class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    thumbnail = db.Column(db.String(), nullable=True)
     minPlayers = db.Column(db.Integer, nullable=False)
     maxPlayers = db.Column(db.Integer, nullable=False)
 
@@ -25,7 +26,10 @@ main = Blueprint("main", __name__)
 def index():
     return render_template("index.html")
 
-
+@main.route("/load")
+def load():
+    results = Game.query.order_by(Game.title.asc()).limit(100).all()
+    return render_template("search_results.html", results=results)
 
 
 @main.route("/search")
@@ -34,33 +38,38 @@ def search():
     print(q)
 
     players = request.args.get("players")
+    if players == "6+":
+        min_players = 6
+        max_players = 100
+    else:
+        min_players = players
+        max_players = players
+
     category = request.args.get("category")
     mechanic = request.args.get("mechanic")
 
     print(mechanic)
     print(players)
 
+    print(q, min_players, max_players, category, mechanic)
 
-    if q and players and category and mechanic:
-        results = Game.query \
-            .join(Category, Game.id==Category.game_id)\
-            .join(Mechanic, Game.id==Mechanic.game_id)\
-            .filter(Game.id.icontains(q) | Game.title.icontains(q)) \
-            .filter(Game.minPlayers <= players, Game.maxPlayers >= players) \
-            .filter(Category.high_level_category == category) \
-            .filter(Mechanic.high_level_mechanic == mechanic) \
-            .order_by(Game.title.asc()).limit(100).all()
-    elif q:
-        results = Game.query \
-            .filter(Game.id.icontains(q) | Game.title.icontains(q)) \
-            .order_by(Game.title.asc()).limit(100).all()
-    elif players:
-        results = Game.query \
-            .filter(Game.minPlayers <= players, Game.maxPlayers >= players) \
-            .order_by(Game.title.asc()).limit(100).all()
-    else:
-        results = Game.query \
-            .order_by(Game.title.asc()).limit(100).all()
+    results = Game.query
+    
+    if q:
+        results = results.filter(Game.id.icontains(q) | Game.title.icontains(q))
+    
+    if players:
+        results = results.filter(Game.minPlayers <= min_players, Game.maxPlayers >= max_players)
+
+    if category:
+        results = results.join(Category, Game.id==Category.game_id) \
+            .filter(Category.high_level_category == category)
+        
+    if mechanic:
+        results = results.join(Mechanic, Game.id==Mechanic.game_id) \
+            .filter(Mechanic.high_level_mechanic == mechanic)
+        
+    results = results.order_by(Game.title.asc()).limit(100).all()
 
     return render_template("search_results.html", results=results)
 
@@ -75,6 +84,7 @@ def load_data():
         game = Game(
             id=row["objectid"],
             title=row["name"],
+            thumbnail=row["thumbnail_x"],
             minPlayers=row["min_players"],
             maxPlayers=row["max_players"]
         )

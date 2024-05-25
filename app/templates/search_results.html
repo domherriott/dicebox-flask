@@ -1,6 +1,8 @@
 {% for result in results %}
 <tr>
-    <td>{{ result.id }}</td> 
+    <td>
+        <img src="{{result.thumbnail}}" alt="{{result.title}}" style="width:5vw;height:auto">
+    </td> 
     <td>{{ result.title }}</td>
     <td>{{ result.minPlayers }} - {{ result.maxPlayers }}</td>
 </tr>
