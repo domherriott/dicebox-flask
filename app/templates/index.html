@@ -11,28 +11,79 @@
   <script src="https://unpkg.com/htmx.org@1.9.4"></script>
 </head>
 <body>
+
   <section class="section">
     <div class="column is-one-third is-offset-one-third">
       <img src="{{ url_for('static',filename='images/dicebox.png') }}" alt="Dicebox Logo">
     </div>
-    
   </section>
-  
-  <section class="section" style="min-height:100vh">
+
+  <section class="section">
     <form hx-boost="true" hx-get="/search" hx-trigger="change delay:250ms" hx-target="#results"/>
-    <input type="text" class="input" placeholder="Search" name="q">
-    <section>
-      
+    
+    <section class="section">
+      <input type="text" class="input" placeholder="Search" name="q">
+    </section>
+    
+    <section class="section">
+
       <div class="columns">
-        Number of players <input type="number" class="input" min=1 max=10 name="players" placeholder="1"/>  
-        <div class="column is-one-third is-offset-one-third">
+
+        <div class="column is-one-third">
+          Number of players <input type="number" class="input" min=1 max=10 name="players" placeholder="1"/>  
         </div>
-      </div>
+
+        <div class="column is-one-third">
+          Category 
+          <select name="category" id="category">
+            <option value="Action">Action</option> 
+            <option value="Card">Card</option>
+            <option value="Dice">Dice</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="History">History</option>
+            <option value="Horror">Horror</option> 
+            <option value="Maze"> Maze</option>
+            <option value="Music">Music</option> 
+            <option value="Party">Party</option> 
+            <option value="Puzzle">Puzzle</option> 
+            <option value="Real-time">Real-time</option>
+            <option value="Sci-Fi">Sci-Fi</option>
+            <option value="Sport">Sport</option> 
+            <option value="Strategy">Strategy</option>
+            <option value="Trivia">Trivia</option> 
+            <option value="War">War</option>
+          </select>
+        </div>
+
+        <div class="column is-one-third">
+          Mechanic
+          <select name="mechanic" id="mechanic">
+            <option value="Asymmetric">Asymmetric</option>
+            <option value="Betting">Betting</option>
+            <option value="Chance">Chance</option>
+            <option value="Co-op">Co-op</option>
+            <option value="Deck building">Deck building</option>
+            <option value="Drawing">Drawing</option>
+            <option value="Memory">Memory</option>
+            <option value="Negotiation">Negotiation</option>
+            <option value="Politics">Politics</option>
+            <option value="Race">Race</option>
+            <option value="Real-time">Real-time</option>
+            <option value="Role play">Role play</option>
+            <option value="Solo">Solo</option>
+            <option value="Team">Team</option>
+            <option value="Trading">Trading</option>
+          </select>
+        </div>
+
+
+    </section>
     </form>
   </section>
 
-
-
+  
+  <section class="section" style="min-height:100vh">
+  
     <table class="table is-fullwidth">
       <thead>
         <tr>
@@ -46,6 +97,7 @@
       </tbody>
     </table>
   </section>
+
 </body>
 
 </html>

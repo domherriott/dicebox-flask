@@ -24,14 +24,13 @@ def get_attribute_value(item, attribute):
     except:
         return None
     
-def get_link_info(item, link_type):
+def process_links(item, link_type):
     info = []
     try:
         links = item.findall('.//link')
         for link in links:
             if link.attrib["type"] == link_type:
                 info.append(link.attrib["value"])
-        
         return info
     except:
         return None
@@ -72,13 +71,18 @@ def get_things(ids: list) -> pd.DataFrame:
     root = ET.fromstring(xml)
 
 
-
+    categories = []
+    mechanics = []
 
     for item in root.findall('.//item'):   
     
         print(item)
+
+        id = int(item.attrib['id']) 
+
+
         data.append({
-            "id" : int(item.attrib['id']),
+            "id" : id,
             "type" : item.attrib["type"],
             "thumbnail" : get_element_text(item, "thumbnail"),
             "image" : get_element_text(item, "image"),
@@ -88,16 +92,29 @@ def get_things(ids: list) -> pd.DataFrame:
             "max_players" : get_attribute_value(item, "maxplayers"),
             "playing_time" : get_attribute_value(item, "playingtime"),
             "min_playtime" : get_attribute_value(item, "minplaytime"),
-            "category" : get_link_info(item, link_type="boardgamecategory"),
-            "mechanic" : get_link_info(item, link_type="boardgamemechanic")
         })
+
+        for cat in process_links(item=item, link_type="boardgamecategory"):
+            categories.append({
+                "id" : id,
+                "category" : cat
+            })
+
+        for mech in process_links(item=item, link_type="boardgamemechanic"):
+            mechanics.append({
+                "id" : id,
+                "mechanic" : mech
+            })
+
  
 
-    df = pd.DataFrame(data)
-    return df
+    df_things = pd.DataFrame(data)
+    df_cat = pd.DataFrame(categories)
+    df_mech = pd.DataFrame(mechanics)
+    return df_things, df_cat, df_mech
 
 
-df_things = get_things(thing_ids)
+df_things, df_cat, df_mech  = get_things(thing_ids)
 
     
 df = pd.merge(left=df_collection, right=df_things, left_on="objectid", right_on="id", validate="m:1")
@@ -105,3 +122,20 @@ df = pd.merge(left=df_collection, right=df_things, left_on="objectid", right_on=
 
 print(df)
 df.to_csv('bgg_export.csv')
+
+
+df_cat_mapping = pd.read_csv('./reference_data/category_mapping.csv')
+print(df_cat_mapping)
+
+df_cat = pd.merge(left=df_cat, right=df_cat_mapping, left_on="category", right_on="category", validate="m:1")
+df_cat = df_cat[['id', 'high_level_category']].drop_duplicates()
+print(df_cat)
+
+df_mech_mapping = pd.read_csv('./reference_data/mechanic_mapping.csv')
+print(df_mech_mapping)
+
+df_mech = pd.merge(left=df_mech, right=df_mech_mapping, left_on="mechanic", right_on="mechanic", validate="m:1")
+df_mech = df_mech[['id', 'high_level_mechanic']].drop_duplicates()
+
+df_cat.to_csv('bgg_export_cat.csv')
+df_mech.to_csv('bgg_export_mech.csv')
