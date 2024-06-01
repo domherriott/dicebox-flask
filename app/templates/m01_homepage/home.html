@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class='container-fluid'>
+    <p> Hi </p>
+</div>
+
+{% for page in config.pages %}
+<section>
+    <div class="column is-one-third is-offset-one-third">
+    <a href="/{{location}}/{{page}}" class="button" style="display: block;">
+            {{page}}
+    </a>
+    </div>
+</section>
+{% endfor %}
+
+{% endblock %}

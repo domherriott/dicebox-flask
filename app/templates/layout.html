@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+        <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+        
+
+
+{% if title %}
+<title>{{ title }}</title>
+{% else %}
+<title>Title</title>
+{% endif %}
+
+<!-- Bring in Bootstrap CSS and theme CSS -->
+<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}" rel="stylesheet">
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+                <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+                <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+                <![endif]-->
+</head>
+<body style="background-color: {{config.color}}; padding-top: 50px; height: 100vh">
+<div id="container-fluid">
+
+<div class="column is-one-third is-offset-one-third" style="text-align: center;">
+    <a href="/{{location}}/">
+        <img src="{{ url_for('static',filename=config.logo) }}" alt="Logo">
+    </a>
+</div>
+
+    <!-- Navigation, header, etc -->
+
+    <! -- Jinja Template Block -->
+    {% block content %}
+    {% endblock %}
+
+
+</div>
+
+<!-- jQuery Version 1.11.0 -->
+<script src="{{ url_for('static', filename='js/jquery-1.11.0.js') }}"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+</body>
+</html>

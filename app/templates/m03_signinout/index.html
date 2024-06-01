@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+
+  <section class="section">
+
+
+    <div class="columns">
+      
+      <div class="column is-one-third">
+
+    <form action="/sign_submit" method="post">            
+            <section class="section">
+              <input type="text" id="fn" class="input is-fullwidth" placeholder="First initial" name="fn">
+              
+              <input type="text" id="sn" class="input is-fullwidth" placeholder="First initial" name="ln">
+              
+              <div class="is-one-half">
+                <input type="radio" id="in" name="sign_type" value="in">
+                <label for="in">Sign-In</label><br>
+              </div>
+              <div class="is-one-half">
+                <input type="radio" id="out" name="sign_type" value="out">
+                <label for="out">Sign-Out</label><br>
+              </div>
+            
+            
+            <button class="button is-fullwidth" type="submit"> Submit </button>
+            </section>
+
+          </form>
+        </div>
+
+          <div class="column is-one-half is-offset-one-third">
+            right
+          </div>
+          
+        </div>
+
+
+    </section>
+  </section>
+
+{% endblock %}
